@@ -1,26 +1,19 @@
 #include "processing.h"
 #include "perf_monitor.h"
 
-PERF_DECLARE(PROCESSING);
-PERF_DECLARE(FILTER);
-
 
 static void filter_run(void)
 {
     volatile unsigned long i;
 
-    PERF_BEGIN(FILTER);
+    PERF_BEGIN_FUNC();
 
-    /*
-     * Simulation d'un traitement.
-     * Remplacer par ton vrai code.
-     */
     for (i = 0U; i < 100000U; ++i)
     {
         /* traitement */
     }
 
-    PERF_END(FILTER);
+    PERF_END_FUNC();
 }
 
 
@@ -28,32 +21,33 @@ void processing_run(void)
 {
     volatile unsigned long i;
 
-    PERF_BEGIN(PROCESSING);
-
     /*
-     * Premier traitement
+     * Chrono automatiquement nommé "processing_run"
      */
+    PERF_BEGIN_FUNC();
+
+
     for (i = 0U; i < 50000U; ++i)
     {
         /* traitement */
     }
+
+
+    /*
+     * Chrono ponctuel nommé MY_ZONE
+     */
+    PERF_BEGIN(MY_ZONE);
 
     filter_run();
 
-    /*
-     * Deuxième traitement
-     */
+    PERF_END(MY_ZONE);
+
+
     for (i = 0U; i < 50000U; ++i)
     {
         /* traitement */
     }
 
-    PERF_END(PROCESSING);
-}
 
-
-void processing_print_perf(void)
-{
-    PERF_PRINT(PROCESSING);
-    PERF_PRINT(FILTER);
+    PERF_END_FUNC();
 }
